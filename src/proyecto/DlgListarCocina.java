@@ -106,27 +106,23 @@ public class DlgListarCocina extends JDialog implements ActionListener {
     }
 
 
-    // Métodos de ejemplo para obtener información de las cocinas
     private String obtenerModelo(int indice) {
-        // Devuelve el modelo de la cocina según el índice proporcionado
         switch (indice) {
             case 0:
-                return "Mabe EMP6120PG0";
+                return FrmVentanaPrincipal.modelo0;
             case 1:
-                return "Indurama Parma";
+                return FrmVentanaPrincipal.modelo1;
             case 2:
-                return "Sole COSOL027";
+                return FrmVentanaPrincipal.modelo2;
             case 3:
-                return "Coldex CX602";
-            case 4:
-                return "Reco Dakota";
+                return FrmVentanaPrincipal.modelo3;
             default:
-                return "";
+                return FrmVentanaPrincipal.modelo4;
+            
         }
     }
 
     private double obtenerPrecio(int indice) {
-        // Devuelve el precio de la cocina según el índice proporcionado
         switch (indice) {
             case 0:
                 return FrmVentanaPrincipal.precio0;
@@ -141,9 +137,7 @@ public class DlgListarCocina extends JDialog implements ActionListener {
         }
     }
 
- // Métodos de ejemplo para obtener información de las cocinas
     private double obtenerAncho(int indice) {
-        // Devuelve el ancho de la cocina según el índice proporcionado
         switch (indice) {
             case 0:
                 return FrmVentanaPrincipal.ancho0;
@@ -160,7 +154,6 @@ public class DlgListarCocina extends JDialog implements ActionListener {
     }
 
     private double obtenerAlto(int indice) {
-        // Devuelve el alto de la cocina según el índice proporcionado
         switch (indice) {
             case 0:
                 return FrmVentanaPrincipal.alto0;
@@ -177,7 +170,6 @@ public class DlgListarCocina extends JDialog implements ActionListener {
     }
 
     private double obtenerFondo(int indice) {
-        // Devuelve el fondo de la cocina según el índice proporcionado
         switch (indice) {
             case 0:
                 return FrmVentanaPrincipal.fondo0;
@@ -194,7 +186,6 @@ public class DlgListarCocina extends JDialog implements ActionListener {
     }
 
     private int obtenerQuemadores(int indice) {
-        // Devuelve la cantidad de quemadores de la cocina según el índice proporcionado
         switch (indice) {
             case 0:
                 return FrmVentanaPrincipal.quemadores0;

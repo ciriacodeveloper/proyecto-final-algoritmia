@@ -144,6 +144,7 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		menuBar.add(mnVentas);
 		
 		mntmVender = new JMenuItem("Vender");
+		mntmVender.addActionListener(this);
 		mnVentas.add(mntmVender);
 		
 		mntmGenerarReportes = new JMenuItem("Generar reportes");
@@ -176,6 +177,9 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmVender) {
+			actionPerformedMntmVender(e);
+		}
 		if (e.getSource() == mntmAcercaDeTienda) {
 			actionPerformedMntmAcercaDeTienda(e);
 		}
@@ -241,4 +245,26 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		con.setLocationRelativeTo(this);
 		
 	}
+	protected void actionPerformedMntmVender(ActionEvent e) {
+		abrirVentanaVenderCocina();
+	}
+
+	private void abrirVentanaVenderCocina() {
+		DlgVenderCocina con = new DlgVenderCocina();
+		con.setVisible(true);
+		con.setLocationRelativeTo(this);
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

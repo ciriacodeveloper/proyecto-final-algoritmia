@@ -64,7 +64,8 @@ public class DlgConsultarCocina extends JDialog implements ActionListener {
 		
 		cboModelo = new JComboBox<String>();
 		cboModelo.addActionListener(this);
-		cboModelo.setModel(new DefaultComboBoxModel<String>(new String[] {"Mabe EMP6120PG0", "Indurama Parma", "Sole COSOL027", "Coldex CX602", "Reco Dakota"}));
+		cboModelo.setModel(new DefaultComboBoxModel<String>(new String[] {
+				"Mabe EMP6120PG0", "Indurama Parma", "Sole COSOL027", "Coldex CX602", "Reco Dakota"}));
 		cboModelo.setBounds(121, 11, 160, 35);
 		getContentPane().add(cboModelo);
 		
