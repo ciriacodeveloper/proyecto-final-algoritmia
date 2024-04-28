@@ -27,17 +27,37 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	private JButton btnCerrar;
 	private JComboBox<String> cboModelo;
 	
-	public static double porcentaje1 = 0.5;
-	public static double porcentaje2 = 0.2;
-	public static double porcentaje3 = 0.1;
-	public static double porcentaje4 = 0.099;
 	
-	public static String obsequio1 = "Una cachetada";
-	public static String obsequio2 = "Un abrazo";
-	public static String obsequio3 = "Un beso";
-	
-	private int contadorVentas = 0;
+	private int contadorVentasTotal = 0;
     private double importeTotalAcumulado = 0;
+    
+    // esta variable es para acumular las veces que se realizo una venta de un modelo de cocina
+    public static int cantidadDeVentas0 = 0;
+    public static int cantidadDeVentas1 = 0;
+    public static int cantidadDeVentas2 = 0;
+    public static int cantidadDeVentas3 = 0;
+    public static int cantidadDeVentas4 = 0;
+	
+	//Cantidad de unidades vendidas por cada modelo de cocina, muestra el total
+    public static int cantidadDeUnidadesVendidas0 = 0;
+    public static int cantidadDeUnidadesVendidas1 = 0;
+    public static int cantidadDeUnidadesVendidas2 = 0;
+    public static int cantidadDeUnidadesVendidas3 = 0;
+    public static int cantidadDeUnidadesVendidas4 = 0;
+    
+    //Importe total vendido, esta variable acumula el importe a pagar cada vez que se realiza una venta por cada modelo de cocina
+    public static double importeTotalVendido0 = 0;
+    public static double importeTotalVendido1 = 0;
+    public static double importeTotalVendido2 = 0;
+    public static double importeTotalVendido3 = 0;
+    public static double importeTotalVendido4 = 0;
+    
+    //Aporte a la cuota diaria, esta variable saca el porcentaje de las variables importe total vendido dividido entre la cuotaDiaria multiplicado por 100
+    public static double porcentajeAporteCuotaDiaria0 = 0;
+    public static double porcentajeAporteCuotaDiaria1 = 0;
+    public static double porcentajeAporteCuotaDiaria2 = 0;
+    public static double porcentajeAporteCuotaDiaria3 = 0;
+    public static double porcentajeAporteCuotaDiaria4 = 0;
 
 	/**
 	 * Launch the application.
@@ -131,10 +151,9 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 		dispose();
 	}
 	
-	int modelo;
 	
 	protected void actionPerformedBtnVender(ActionEvent e) {
-	    int cant;
+	    int cant, modelo;
 	    double iComp, iDscto, iPag;
 	    String obsq;
 
@@ -146,23 +165,13 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	    iPag = calcularImportePagar(iComp, iDscto);
 	    obsq = calcularObsequio(cant);
 
-	    txtS.setText("");
-	    txtS.append("BOLETA DE VENTA:" + "\n\n");
-	    txtS.append("Modelo: 		" + cboModelo.getSelectedItem() + "\n");
-	    txtS.append("Precio: S/ 		" + obtenerPrecio(modelo) + "\n");
-	    txtS.append("Cantidad: 		" + cant + "\n");
-	    txtS.append("Importe de compra: 	" + String.format("%.2f", iComp) + "\n");
-	    txtS.append("Importe de descuento: 	" + String.format("%.2f", iDscto) + "\n");
-	    txtS.append("Importe de pagar: 	" + String.format("%.2f", iPag) + "\n");
-	    txtS.append("Obsequio: 		" + obsq + "\n");
+	    imprimir(cant, iComp, iDscto, iPag, obsq, modelo);
 	    
-	    importeTotalAcumulado += iPag;
-	    contadorVentas++;
-	    if (contadorVentas == 5) {
-            mostrarVentanaMensaje();
-            contadorVentas = 0; // Reiniciar el contador
-            importeTotalAcumulado = 0; // Reiniciar el importe total acumulado
-        }
+	    avanceVentas( iPag );
+	    cantidadDeVentas( modelo );
+	    cantidadDeUnidadesVendidas( modelo, cant );
+	    importeTotalVendido( modelo, iPag );
+	    porcentajeAporteCuotaDiaria( modelo );
 	}
 
 
@@ -185,10 +194,10 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	}
 	
 	private double calcularImporteDescuento(int cant, double iComp) {
-		if (cant < 2) return iComp * porcentaje1;
-		else if(cant < 6) return iComp * porcentaje2;
-		else if(cant < 11) return iComp * porcentaje3;
-		else return iComp * porcentaje4;
+		if (cant <= 5) return iComp * FrmVentanaPrincipal.porcentaje1;
+		else if(cant <= 10) return iComp * FrmVentanaPrincipal.porcentaje2;
+		else if(cant <= 15) return iComp * FrmVentanaPrincipal.porcentaje3;
+		else return iComp * FrmVentanaPrincipal.porcentaje4;
 	}
 	
 	private double calcularImportePagar(double iComp, double iDscto) {
@@ -196,12 +205,13 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	}
 	
 	String calcularObsequio( int cant ) {
-		if ( cant == 1 ) return obsequio1;
-		else if ( cant <= 5 ) return obsequio2;
-		else return obsequio3;
+		if ( cant == 1 ) return FrmVentanaPrincipal.obsequio1;
+		else if ( cant <= 5 ) return FrmVentanaPrincipal.obsequio2;
+		else return FrmVentanaPrincipal.obsequio3;
 	}
 	
 	private void actionPerformedCboModelo(ActionEvent e) {
+		int modelo;
 		modelo = getModelo();
 		mostrarData(modelo);
 	}
@@ -241,15 +251,121 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
                 return FrmVentanaPrincipal.precio4;
         }
     }
+
+	private void imprimir(int cant, double iComp, double iDscto, double iPag, String obsq, int modelo) {
+		txtS.setText("");
+	    txtS.append("BOLETA DE VENTA:" + "\n\n");
+	    txtS.append("Modelo: 		" + cboModelo.getSelectedItem() + "\n");
+	    txtS.append("Precio: S/ 		" + obtenerPrecio(modelo) + "\n");
+	    txtS.append("Cantidad: 		" + cant + "\n");
+	    txtS.append("Importe de compra: 	" + String.format("%.2f", iComp) + "\n");
+	    txtS.append("Importe de descuento: 	" + String.format("%.2f", iDscto) + "\n");
+	    txtS.append("Importe de pagar: 	" + String.format("%.2f", iPag) + "\n");
+	    txtS.append("Obsequio: 		" + obsq + "\n");
+	}
+
+	private void avanceVentas(double iPag) {
+		importeTotalAcumulado += iPag;
+	    contadorVentasTotal++;
+	    if (contadorVentasTotal == 5) {
+            mostrarVentanaMensaje();
+            contadorVentasTotal = 0; // Reiniciar el contador
+            importeTotalAcumulado = 0; // Reiniciar el importe total acumulado
+        }
+	}
 	
 	private void mostrarVentanaMensaje() {
         double porcentajeCuotaDiaria = (importeTotalAcumulado / FrmVentanaPrincipal.cuotaDiaria) * 100;
-        String mensaje = "Venta Nro.: " + contadorVentas + "\n";
+        String mensaje = "Venta Nro.: " + contadorVentasTotal + "\n";
         mensaje += "Importe total general acumulado: " + String.format("%.2f", importeTotalAcumulado) + "\n";
         mensaje += "Porcentaje de la cuota diaria: " + String.format("%.2f", porcentajeCuotaDiaria) + "%";
 
         JOptionPane.showMessageDialog(this, mensaje, "Avance de ventas", JOptionPane.INFORMATION_MESSAGE);
     }
+	
+	private void cantidadDeVentas(int modelo) {
+		
+		switch (modelo) {
+		case 0:
+			cantidadDeVentas0++;
+			break;
+		case 1:
+			cantidadDeVentas1++;
+			break;
+		case 2:
+			cantidadDeVentas2++;
+			break;
+		case 3:
+			cantidadDeVentas3++;
+			break;
+		default:
+			cantidadDeVentas4++;
+			break;
+		}
+	}
+	
+	private void cantidadDeUnidadesVendidas(int modelo, int cant) {
+		
+		switch (modelo) {
+		case 0:
+			cantidadDeUnidadesVendidas0 += cant;
+			break;
+		case 1:
+			cantidadDeUnidadesVendidas1 += cant;
+			break;
+		case 2:
+			cantidadDeUnidadesVendidas2 += cant;
+			break;
+		case 3:
+			cantidadDeUnidadesVendidas3 += cant;
+			break;
+
+		default:
+		case 4:
+			cantidadDeUnidadesVendidas4 += cant;
+			break;
+		}
+	}
+
+	private void importeTotalVendido( int modelo, double iPag ) {
+		switch (modelo) {
+		case 0:
+			importeTotalVendido0 += iPag;
+			break;
+		case 1:
+			importeTotalVendido1 += iPag;
+			break;
+		case 2:
+			importeTotalVendido2 += iPag;
+			break;
+		case 3:
+			importeTotalVendido3 += iPag;
+			break;
+		default:
+			importeTotalVendido4 += iPag;
+			break;
+		}
+	}
+	
+	private void porcentajeAporteCuotaDiaria(int modelo) {
+		switch (modelo) {
+		case 0:
+			porcentajeAporteCuotaDiaria0 = (importeTotalVendido0 / FrmVentanaPrincipal.cuotaDiaria) * 100;
+			break;
+		case 1:
+			porcentajeAporteCuotaDiaria1 = (importeTotalVendido1 / FrmVentanaPrincipal.cuotaDiaria) * 100;
+			break;
+		case 2:
+			porcentajeAporteCuotaDiaria2 = (importeTotalVendido2 / FrmVentanaPrincipal.cuotaDiaria) * 100;
+			break;
+		case 3:
+			porcentajeAporteCuotaDiaria3 = (importeTotalVendido3 / FrmVentanaPrincipal.cuotaDiaria) * 100;
+			break;
+		default:
+			porcentajeAporteCuotaDiaria4 = (importeTotalVendido4 / FrmVentanaPrincipal.cuotaDiaria) * 100;
+			break;
+		}
+	}
 }
 
 

@@ -71,18 +71,20 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		public static double fondo4 = 66.0;
 		public static int quemadores4 = 5;
 		// Porcentajes de descuento
-		public static double porcentaje1 = 7.5;
-		public static double porcentaje2 = 10.0;
-		public static double porcentaje3 = 12.5;
-		public static double porcentaje4 = 15.0;
+		public static double porcentaje1 = 0.075;
+		public static double porcentaje2 = 0.1;
+		public static double porcentaje3 = 0.125;
+		public static double porcentaje4 = 0.15;
 		// Obsequios
 		public static String obsequio1 = "Cafetera";
 		public static String obsequio2 = "Licuadora";
 		public static String obsequio3 = "Extractor";
 		// Cantidad óptima de unidades vendidas
-		public static int cantidadOptima = 30;
+		public static int cantidadOptima = 10;
 		// Cuota diaria
 		public static double cuotaDiaria = 75000;
+		
+		
 
 	/**
 	 * Launch the application.
@@ -148,6 +150,7 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		mnVentas.add(mntmVender);
 		
 		mntmGenerarReportes = new JMenuItem("Generar reportes");
+		mntmGenerarReportes.addActionListener(this);
 		mnVentas.add(mntmGenerarReportes);
 		
 		mnConfiguracin = new JMenu("Configuraci\u00F3n");
@@ -177,6 +180,9 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmGenerarReportes) {
+			actionPerformedMntmGenerarReportes(e);
+		}
 		if (e.getSource() == mntmVender) {
 			actionPerformedMntmVender(e);
 		}
@@ -236,10 +242,10 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		
 	}
 	protected void actionPerformedMntmAcercaDeTienda(ActionEvent e) {
-		abrirAcercaDeTienda();
+		abrirVentanaAcercaDeTienda();
 	}
 
-	private void abrirAcercaDeTienda() {
+	private void abrirVentanaAcercaDeTienda() {
 		DlgAcercaDeTienda con = new DlgAcercaDeTienda();
 		con.setVisible(true);
 		con.setLocationRelativeTo(this);
@@ -251,6 +257,16 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 
 	private void abrirVentanaVenderCocina() {
 		DlgVenderCocina con = new DlgVenderCocina();
+		con.setVisible(true);
+		con.setLocationRelativeTo(this);
+		
+	}
+	protected void actionPerformedMntmGenerarReportes(ActionEvent e) {
+		abrirVentanaGenerarReporte();
+	}
+
+	private void abrirVentanaGenerarReporte() {
+		DlgGenerarReportes con = new DlgGenerarReportes();
 		con.setVisible(true);
 		con.setLocationRelativeTo(this);
 		
