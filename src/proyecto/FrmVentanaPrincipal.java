@@ -83,7 +83,18 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		public static int cantidadOptima = 10;
 		// Cuota diaria
 		public static double cuotaDiaria = 75000;
-		
+		// Precio promedio
+		public static double precioPromedio = getPrecioPromedio();
+		// Precio menor
+		public static double precioMenor = getPrecioMenor();
+		// Precio mayor
+		public static double precioMayor = getPrecioMayor();
+		// Ancho promedio
+		public static double anchoPromedio = getAnchoPromedio();
+		// Ancho menor
+		public static double anchoMenor = getAnchoMenor();
+		// Ancho mayor
+		public static double anchoMayor = getAnchoMayor();
 		
 
 	/**
@@ -238,8 +249,6 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		DlgListarCocina con = new DlgListarCocina();
 		con.setVisible(true);
 		con.setLocationRelativeTo(this);
-		
-		
 	}
 	protected void actionPerformedMntmAcercaDeTienda(ActionEvent e) {
 		abrirVentanaAcercaDeTienda();
@@ -249,7 +258,6 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		DlgAcercaDeTienda con = new DlgAcercaDeTienda();
 		con.setVisible(true);
 		con.setLocationRelativeTo(this);
-		
 	}
 	protected void actionPerformedMntmVender(ActionEvent e) {
 		abrirVentanaVenderCocina();
@@ -259,7 +267,6 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		DlgVenderCocina con = new DlgVenderCocina();
 		con.setVisible(true);
 		con.setLocationRelativeTo(this);
-		
 	}
 	protected void actionPerformedMntmGenerarReportes(ActionEvent e) {
 		abrirVentanaGenerarReporte();
@@ -268,8 +275,51 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 	private void abrirVentanaGenerarReporte() {
 		DlgGenerarReportes con = new DlgGenerarReportes();
 		con.setVisible(true);
-		con.setLocationRelativeTo(this);
-		
+		con.setLocationRelativeTo(this);	
+	}
+	
+	public static double getPrecioPromedio() {
+        return (precio0 + precio1 + precio2 + precio3 + precio4) / 5;
+    }
+	
+	public static double getPrecioMenor() {
+        double menor = precio0;
+        if (precio1 < menor) menor = precio1;
+        if (precio2 < menor) menor = precio2;
+        if (precio3 < menor) menor = precio3;
+        if (precio4 < menor) menor = precio4;
+        return menor;
+    }
+	
+	public static double getPrecioMayor() {
+        double mayor = precio0;
+        if (precio1 > mayor) mayor = precio1;
+        if (precio2 > mayor) mayor = precio2;
+        if (precio3 > mayor) mayor = precio3;
+        if (precio4 > mayor) mayor = precio4;
+        return mayor;
+    }
+	
+	public static double getAnchoPromedio() {
+        return (ancho0 + ancho1 + ancho2 + ancho3 + ancho4) / 5;
+    }
+	
+	public static double getAnchoMenor() {
+		double menor = ancho0;
+        if (ancho1 < menor) menor = ancho1;
+        if (ancho2 < menor) menor = ancho2;
+        if (ancho3 < menor) menor = ancho3;
+        if (ancho4 < menor) menor = ancho4;
+        return menor;
+	}
+	
+	public static double getAnchoMayor() {
+		double mayor = ancho0;
+        if (ancho1 > mayor) mayor = ancho1;
+        if (ancho2 > mayor) mayor = ancho2;
+        if (ancho3 > mayor) mayor = ancho3;
+        if (ancho4 > mayor) mayor = ancho4;
+        return mayor;
 	}
 }
 

@@ -55,6 +55,7 @@ public class DlgGenerarReportes extends JDialog implements ActionListener {
 		getContentPane().add(lblTipo);
 		
 		cboReporte = new JComboBox<String>();
+		cboReporte.addActionListener(this);
 		cboReporte.setModel(new DefaultComboBoxModel<String>(new String[] {"Ventas por modelo", "Ventas en relación a la venta óptima", "Precios en relación al precio promedio", "Promedios, menores y mayores"}));
 		cboReporte.setBounds(114, 11, 300, 38);
 		getContentPane().add(cboReporte);
@@ -71,32 +72,52 @@ public class DlgGenerarReportes extends JDialog implements ActionListener {
 		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
 		
-		reporteVentasPorModelo();
+		mostrarInformacion(0);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == cboReporte) {
-            // Verificar si se selecciona el primer ítem del JComboBox
-            if (cboReporte.getSelectedIndex() == 0)
-                // Llamar al método para generar el reporte
-            	reporteVentasPorModelo();
-            else if ( cboReporte.getSelectedIndex() == 1 ) 
-            	reporteVentasRelacionVentaOptima();
-            
-        } else if (e.getSource() == btnCerrar) {
-            actionPerformedBtnCerrar(e);}
-        }
-	
+		if (e.getSource() == cboReporte) {
+			actionPerformedComboBox(e);
+		}
+		if (e.getSource() == btnCerrar) {
+			actionPerformedBtnCerrar(e);
+		}
+	}
+
 	protected void actionPerformedBtnCerrar(ActionEvent e) {
 		dispose();
 	}
 	
+	private void actionPerformedComboBox(ActionEvent e) {
+		int modelo;
+		modelo = getModelo();
+		mostrarInformacion(modelo);		
+	}
+	
+	private int getModelo() {
+		return cboReporte.getSelectedIndex();
+	}
+	
+	private void mostrarInformacion(int modelo) {
+		switch (modelo) {
+		case 0:
+			reporteVentasPorModelo();
+			break;
+		case 1:
+			reporteVentasRelacionVentaOptima();
+			break;
+		case 2:
+			preciosRelacionPrecioPromedio();
+			break;
+		default:
+			promediosMenoresMayores();
+		}
+	}
+
 	// Método para generar el reporte Ventas por modelo
     private void reporteVentasPorModelo() {
         textArea.setText("");
-
         textArea.append("VENTAS POR MODELO\n\n");
-
         // Mostrar información para cada modelo de cocina
         mostrarInfoModelo0(FrmVentanaPrincipal.modelo0, DlgVenderCocina.cantidadDeVentas0, DlgVenderCocina.cantidadDeUnidadesVendidas0, DlgVenderCocina.importeTotalVendido0, DlgVenderCocina.porcentajeAporteCuotaDiaria0);
         mostrarInfoModelo0(FrmVentanaPrincipal.modelo1, DlgVenderCocina.cantidadDeVentas1, DlgVenderCocina.cantidadDeUnidadesVendidas1, DlgVenderCocina.importeTotalVendido1, DlgVenderCocina.porcentajeAporteCuotaDiaria1);
@@ -114,11 +135,7 @@ public class DlgGenerarReportes extends JDialog implements ActionListener {
         textArea.append("Aporte a la cuota diaria 	: " + String.format("%.2f", porcAporteCuotaDiaria) + "%\n\n");
     }
     
-    
-    
-    
-    
-    
+
     
     // Método para generar el reporte: Ventas en relación a la venta óptima
     private void reporteVentasRelacionVentaOptima() {
@@ -142,17 +159,67 @@ public class DlgGenerarReportes extends JDialog implements ActionListener {
     
     private String relacionVentaOptima(int cantUndVend) {
         int diferencia = cantUndVend - FrmVentanaPrincipal.cantidadOptima;
+        int diferenciaAbsoluta = Math.abs(diferencia); // Tomamos el valor absoluto de la diferencia
         if (cantUndVend > FrmVentanaPrincipal.cantidadOptima)
-            return "(" + diferencia + " más que la cantidad óptima)";
+            return "(" + diferenciaAbsoluta + " más que la cantidad óptima)";
         else if (cantUndVend < FrmVentanaPrincipal.cantidadOptima)
-            return "(" + diferencia + " menos que la cantidad óptima)";
+            return "(" + diferenciaAbsoluta + " menos que la cantidad óptima)";
         else
             return "(igual a la cantidad óptima)";
     }
     
+    // Precios en relación al precio promedio
+    private void preciosRelacionPrecioPromedio() {
+        textArea.setText("");
+        textArea.append("PRECIOS EN RELACIÓN AL PRECIO PROMEDIO\n\n");
+
+        // Mostrar información para cada modelo de cocina
+        mostrarInfoModelo2(FrmVentanaPrincipal.modelo0, FrmVentanaPrincipal.precio0);
+        mostrarInfoModelo2(FrmVentanaPrincipal.modelo1, FrmVentanaPrincipal.precio1);
+        mostrarInfoModelo2(FrmVentanaPrincipal.modelo2, FrmVentanaPrincipal.precio2);
+        mostrarInfoModelo2(FrmVentanaPrincipal.modelo3, FrmVentanaPrincipal.precio3);
+        mostrarInfoModelo2(FrmVentanaPrincipal.modelo4, FrmVentanaPrincipal.precio4);
+	}
+    
+    private void mostrarInfoModelo2(String nombreCocina, double precio) {
+        textArea.append("Modelo 		: " + nombreCocina + "\n");
+        textArea.append("Cantidad de unidades vendidas : " + precio + relacionPrecioPromedio(precio) + "\n\n");
+    }
+    
+    private String relacionPrecioPromedio(double precio) {
+    	if (precio > FrmVentanaPrincipal.precioPromedio)
+    		return " (Mayor al promedio)";
+    	else if (precio < FrmVentanaPrincipal.precioPromedio)
+    		return " (Menor al promedio)";
+    	else
+    		return " (Igual al promedio)";
+    }
     
     
-    
+    // Promedios, menores y mayores
+    private void promediosMenoresMayores() {
+        textArea.setText("");
+        textArea.append("PROMEDIOS, MENORES Y MAYORES\n\n");
+        // PRECIOS: Precio promedio, Precio menor, Precio mayor
+        mostrarInfoPrecio3("Precio promedio	:", FrmVentanaPrincipal.precioPromedio);
+        mostrarInfoPrecio3("Precio menor		:", FrmVentanaPrincipal.precioMenor);
+        mostrarInfoPrecio3("Precio mayor:		", FrmVentanaPrincipal.precioMayor);
+        textArea.append("\n");
+        // PROMEDIOS: Ancho promedio, Ancho menor, Ancho mayor
+        mostrarInfoPromedio4("Ancho promedio	:", FrmVentanaPrincipal.anchoPromedio);
+        mostrarInfoPromedio4("Ancho menor		:", FrmVentanaPrincipal.anchoMenor);
+        mostrarInfoPromedio4("Ancho mayor		:", FrmVentanaPrincipal.anchoMayor);
+    }
+
+    private void mostrarInfoPrecio3(String etiqueta, double valor) {
+        textArea.append(etiqueta + "S/. " + String.format("%.2f", valor) + "\n");
+    }
+
+    private void mostrarInfoPromedio4(String etiqueta, double valor) {
+        textArea.append(etiqueta + String.format("%.1f", valor) + " cm\n");
+    }
+	
+	
 }
 
 
