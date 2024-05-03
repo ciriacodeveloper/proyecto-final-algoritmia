@@ -132,6 +132,7 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 		btnCerrar.addActionListener(this);
 		btnCerrar.setBounds(323, 59, 89, 25);
 		getContentPane().add(btnCerrar);
+		userAutentication();
 		mostrarData(0);
 	}
 	
@@ -140,10 +141,26 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 			actionPerformedCboModelo(e);
 		}
 		if (e.getSource() == btnVender) {
-			actionPerformedBtnVender(e);
+			saveChanges(e);
 		}
 		if (e.getSource() == btnCerrar) {
 			actionPerformedBtnCerrar(e);
+		}
+	}
+	private void userAutentication() {
+		if (!Login.usuarioAutenticado.getRol().equals("administrador")) {
+	        txtCantidad.setEditable(false);
+	    }
+	}
+	private void saveChanges(ActionEvent e) {
+		if (!Login.usuarioAutenticado.getRol().equals("administrador")) {
+			JOptionPane.showMessageDialog(this, "Solo el administrador puede realizar ventas.", "Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estas seguro que deseas realizar la venta?", "Confirmar venta", JOptionPane.YES_NO_OPTION);
+		    if (confirmacion == JOptionPane.YES_OPTION) {
+		    	actionPerformedBtnVender(e);	
+		        dispose();
+		    }
 		}
 	}
 	
@@ -158,7 +175,17 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	    String obsq;
 
 	    modelo = getModelo();
-	    cant = getCantidad();
+	    try {
+			cant = getCantidad();
+			
+			if (cant <= 0){
+				mesajeError("Ingresar valores mayores a 0.");
+				return;
+			}
+		} catch (NumberFormatException n) {
+			mesajeError("Ingresar valores númericos sin decimal.");
+			return;
+		}
 
 	    iComp = calcularImporteCompra(modelo, cant);
 	    iDscto = calcularImporteDescuento(cant, iComp);
@@ -172,15 +199,19 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	    cantidadDeUnidadesVendidas( modelo, cant );
 	    importeTotalVendido( modelo, iPag );
 	    porcentajeAporteCuotaDiaria( modelo );
+
+	    JOptionPane.showMessageDialog(this, "Cambios guardados correctamente.");
 	}
 
-
+	private void mesajeError(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje, "Error!!!", 0);
+	}
 	private int getModelo() {
 		return cboModelo.getSelectedIndex();
 	}
 	
 	private int getCantidad() {
-		return Integer.parseInt(txtCantidad.getText());
+			return Integer.parseInt(txtCantidad.getText());
 	}
 	
 	private double calcularImporteCompra(int modelo, int cant) {
@@ -194,10 +225,10 @@ public class DlgVenderCocina extends JDialog implements ActionListener {
 	}
 	
 	private double calcularImporteDescuento(int cant, double iComp) {
-		if (cant <= 5) return iComp * FrmVentanaPrincipal.porcentaje1;
-		else if(cant <= 10) return iComp * FrmVentanaPrincipal.porcentaje2;
-		else if(cant <= 15) return iComp * FrmVentanaPrincipal.porcentaje3;
-		else return iComp * FrmVentanaPrincipal.porcentaje4;
+		if (cant <= 5) return iComp * (FrmVentanaPrincipal.porcentaje1 / 100);
+		else if(cant <= 10) return iComp * (FrmVentanaPrincipal.porcentaje2 / 100);
+		else if(cant <= 15) return iComp * (FrmVentanaPrincipal.porcentaje3 / 100);
+		else return iComp * (FrmVentanaPrincipal.porcentaje4 / 100 );
 	}
 	
 	private double calcularImportePagar(double iComp, double iDscto) {

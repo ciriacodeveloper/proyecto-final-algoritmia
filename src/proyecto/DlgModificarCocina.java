@@ -4,6 +4,7 @@ package proyecto;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
@@ -122,109 +123,120 @@ public class DlgModificarCocina extends JDialog implements ActionListener {
         btnGrabar.addActionListener(this);
 		btnGrabar.setBounds(334, 53, 90, 32);
 		getContentPane().add(btnGrabar);
+		userAutentication();
 		mostrarData(0);
 	}
+
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnCerrar) {
             dispose();
         } else if (e.getSource() == btnGrabar) {
-            guardarCambios();
-            dispose();
+        	saveChanges();
         } else if (e.getSource() == cboModelo) {
-            int modelo = cboModelo.getSelectedIndex();
+            int modelo = getModelo();
             mostrarData(modelo);
         }
     }
-	
-	private void mostrarData(int modelo) {
-		switch (modelo) {
-		case 0:
-			txtPrecio.setText(FrmVentanaPrincipal.precio0 + "");
-			txtAlto.setText(FrmVentanaPrincipal.alto0 + "");
-			txtAncho.setText(FrmVentanaPrincipal.ancho0 + "");
-			txtFondo.setText(FrmVentanaPrincipal.fondo0 + "");
-			txtQuemadores.setText(FrmVentanaPrincipal.quemadores0 + "");
-			break;
-		case 1:
-			txtPrecio.setText(FrmVentanaPrincipal.precio1 + "");
-			txtAlto.setText(FrmVentanaPrincipal.alto1 + "");
-			txtAncho.setText(FrmVentanaPrincipal.ancho1 + "");
-			txtFondo.setText(FrmVentanaPrincipal.fondo1 + "");
-			txtQuemadores.setText(FrmVentanaPrincipal.quemadores1 + "");
-			break;
-		case 2:
-			txtPrecio.setText(FrmVentanaPrincipal.precio2 + "");
-			txtAlto.setText(FrmVentanaPrincipal.alto2 + "");
-			txtAncho.setText(FrmVentanaPrincipal.ancho2 + "");
-			txtFondo.setText(FrmVentanaPrincipal.fondo2 + "");
-			txtQuemadores.setText(FrmVentanaPrincipal.quemadores2 + "");
-			break;
-		case 3:
-			txtPrecio.setText(FrmVentanaPrincipal.precio3 + "");
-			txtAlto.setText(FrmVentanaPrincipal.alto3 + "");
-			txtAncho.setText(FrmVentanaPrincipal.ancho3 + "");
-			txtFondo.setText(FrmVentanaPrincipal.fondo3 + "");
-			txtQuemadores.setText(FrmVentanaPrincipal.quemadores3 + "");
-			break;
-		default:
-			txtPrecio.setText(FrmVentanaPrincipal.precio4 + "");
-			txtAlto.setText(FrmVentanaPrincipal.alto4 + "");
-			txtAncho.setText(FrmVentanaPrincipal.ancho4 + "");
-			txtFondo.setText(FrmVentanaPrincipal.fondo4 + "");
-			txtQuemadores.setText(FrmVentanaPrincipal.quemadores4 + "");
-
+	private void userAutentication() {
+		if (!Login.usuarioAutenticado.getRol().equals("administrador")) {
+			txtPrecio.setEditable(false);
+		    txtAncho.setEditable(false);
+		    txtAlto.setEditable(false);
+		    txtFondo.setEditable(false);
+		    txtQuemadores.setEditable(false);
 		}
 	}
+	private int getModelo() {
+		int modelo = cboModelo.getSelectedIndex();
+		return modelo;
+	}
 
-	// Método para guardar los cambios realizados en la cocina
+	private void saveChanges() {
+		if (!Login.usuarioAutenticado.getRol().equals("administrador")) {
+			JOptionPane.showMessageDialog(this, "Solo el administrador puede realizar modificaciones.", "Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estas seguro que deseas guardar los cambios?", "Confirmar cambios", JOptionPane.YES_NO_OPTION);
+		    if (confirmacion == JOptionPane.YES_OPTION) {
+		        guardarCambios();	
+		        dispose();
+		    }
+		}
+	}
+	
+	private void mostrarData(int modelo) {
+	    switch (modelo) {
+	        case 0:	            
+	            mostrarDatosCocina(FrmVentanaPrincipal.precio0, FrmVentanaPrincipal.alto0, FrmVentanaPrincipal.ancho0, FrmVentanaPrincipal.fondo0, FrmVentanaPrincipal.quemadores0);
+	            break;
+	        case 1:
+	            mostrarDatosCocina(FrmVentanaPrincipal.precio1, FrmVentanaPrincipal.alto1, FrmVentanaPrincipal.ancho1, FrmVentanaPrincipal.fondo1, FrmVentanaPrincipal.quemadores1);
+	            break;
+	        case 2:
+	            mostrarDatosCocina(FrmVentanaPrincipal.precio2, FrmVentanaPrincipal.alto2, FrmVentanaPrincipal.ancho2, FrmVentanaPrincipal.fondo2, FrmVentanaPrincipal.quemadores2);
+	            break;
+	        case 3:
+	            mostrarDatosCocina(FrmVentanaPrincipal.precio3, FrmVentanaPrincipal.alto3, FrmVentanaPrincipal.ancho3, FrmVentanaPrincipal.fondo3, FrmVentanaPrincipal.quemadores3);
+	            break;
+	        default:
+	            mostrarDatosCocina(FrmVentanaPrincipal.precio4, FrmVentanaPrincipal.alto4, FrmVentanaPrincipal.ancho4, FrmVentanaPrincipal.fondo4, FrmVentanaPrincipal.quemadores4);
+	    }
+	}
+
+	private void mostrarDatosCocina(double precio, double alto, double ancho, double fondo, int quemadores) {
+	    txtPrecio.setText(Double.toString(precio));
+	    txtAlto.setText(Double.toString(alto));
+	    txtAncho.setText(Double.toString(ancho));
+	    txtFondo.setText(Double.toString(fondo));
+	    txtQuemadores.setText(Integer.toString(quemadores));
+	}
+
 	private void guardarCambios() {
-	    // Obtener el modelo seleccionado
-	    int modelo = cboModelo.getSelectedIndex();
-	    // Obtener los nuevos valores ingresados en los campos de texto
+		
 	    double nuevoPrecio = Double.parseDouble(txtPrecio.getText());
 	    double nuevoAncho = Double.parseDouble(txtAncho.getText());
 	    double nuevoAlto = Double.parseDouble(txtAlto.getText());
 	    double nuevoFondo = Double.parseDouble(txtFondo.getText());
-	    double nuevoQuemadores = Double.parseDouble(txtQuemadores.getText());
+	    int nuevoQuemadores = Integer.parseInt(txtQuemadores.getText());
 
-	    // Actualizar los datos en la ventana principal
+	    int modelo = getModelo();
 	    switch (modelo) {
 	        case 0:
 	            FrmVentanaPrincipal.precio0 = nuevoPrecio;
 	            FrmVentanaPrincipal.ancho0 = nuevoAncho;
 	            FrmVentanaPrincipal.alto0 = nuevoAlto;
 	            FrmVentanaPrincipal.fondo0 = nuevoFondo;
-	            FrmVentanaPrincipal.quemadores0 = (int) nuevoQuemadores;
+	            FrmVentanaPrincipal.quemadores0 = nuevoQuemadores;
 	            break;
 	        case 1:
 	            FrmVentanaPrincipal.precio1 = nuevoPrecio;
 	            FrmVentanaPrincipal.ancho1 = nuevoAncho;
 	            FrmVentanaPrincipal.alto1 = nuevoAlto;
 	            FrmVentanaPrincipal.fondo1 = nuevoFondo;
-	            FrmVentanaPrincipal.quemadores1 = (int) nuevoQuemadores;
+	            FrmVentanaPrincipal.quemadores1 = nuevoQuemadores;
 	            break;
 	        case 2:
 	            FrmVentanaPrincipal.precio2 = nuevoPrecio;
 	            FrmVentanaPrincipal.ancho2 = nuevoAncho;
 	            FrmVentanaPrincipal.alto2 = nuevoAlto;
 	            FrmVentanaPrincipal.fondo2 = nuevoFondo;
-	            FrmVentanaPrincipal.quemadores2 = (int) nuevoQuemadores;
+	            FrmVentanaPrincipal.quemadores2 = nuevoQuemadores;
 	            break;
 	        case 3:
 	            FrmVentanaPrincipal.precio3 = nuevoPrecio;
 	            FrmVentanaPrincipal.ancho3 = nuevoAncho;
 	            FrmVentanaPrincipal.alto3 = nuevoAlto;
 	            FrmVentanaPrincipal.fondo3 = nuevoFondo;
-	            FrmVentanaPrincipal.quemadores3 = (int) nuevoQuemadores;
+	            FrmVentanaPrincipal.quemadores3 = nuevoQuemadores;
 	            break;
 	        default:
 	            FrmVentanaPrincipal.precio4 = nuevoPrecio;
 	            FrmVentanaPrincipal.ancho4 = nuevoAncho;
 	            FrmVentanaPrincipal.alto4 = nuevoAlto;
 	            FrmVentanaPrincipal.fondo4 = nuevoFondo;
-	            FrmVentanaPrincipal.quemadores4 = (int) nuevoQuemadores;
+	            FrmVentanaPrincipal.quemadores4 = nuevoQuemadores;
 	    }
-	}
+	    JOptionPane.showMessageDialog(this, "Cambios guardados correctamente.");
+    }
 
 }
 

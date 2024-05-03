@@ -20,8 +20,10 @@ public class DlgAcercaDeTienda extends JDialog implements ActionListener {
 	private JButton btnCerrar;
 	private JLabel lblAutor;
 	private JLabel lblAño;
-	private JLabel lblLimaPeru;
-	private JLabel lblWwwciriacodevelopercom;
+	private JLabel lblEricAlfonsoIllapuma;
+	private JLabel lblSebastianAmadorYallico;
+	private JLabel lblEdinsonAdrielSalas;
+	private JLabel lblEdinsonAdrielSalas_1;
 
 	/**
 	 * Launch the application.
@@ -48,7 +50,7 @@ public class DlgAcercaDeTienda extends JDialog implements ActionListener {
 	 */
 	public DlgAcercaDeTienda() {
 		setTitle("Acerca de Tienda");
-		setBounds(100, 100, 450, 233);
+		setBounds(100, 100, 450, 298);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -61,28 +63,39 @@ public class DlgAcercaDeTienda extends JDialog implements ActionListener {
 
 		btnCerrar = new JButton("Cerrar");
 		btnCerrar.addActionListener(this);
-		btnCerrar.setBounds(172, 155, 89, 28);
+		btnCerrar.setBounds(172, 210, 89, 28);
 		contentPanel.add(btnCerrar);
 
 		// poner tilde D\u00E9bora	
-		lblAutor = new JLabel("Hecho por Joseph Michael Ciriaco Bermudez");
+		lblAutor = new JLabel("AUTORES");
 		lblAutor.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblAutor.setBounds(95, 53, 243, 15);
+		lblAutor.setBounds(188, 53, 57, 15);
 		contentPanel.add(lblAutor);
 
-		lblAño = new JLabel("2024");
+		lblAño = new JLabel("Joseph Michael Ciriaco Bermudez");
 		lblAño.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblAño.setBounds(203, 76, 28, 15);
+		lblAño.setBounds(128, 76, 177, 15);
 		contentPanel.add(lblAño);
-
-		lblLimaPeru = new JLabel("Lima, Per\u00FA");
-		lblLimaPeru.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblLimaPeru.setBounds(188, 101, 57, 15);
-		contentPanel.add(lblLimaPeru);
 		
-		lblWwwciriacodevelopercom = new JLabel("www.ciriacodeveloper.com");
-		lblWwwciriacodevelopercom.setBounds(143, 128, 147, 16);
-		contentPanel.add(lblWwwciriacodevelopercom);
+		lblEricAlfonsoIllapuma = new JLabel("Eric Alfonso Illapuma Collazos");
+		lblEricAlfonsoIllapuma.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblEricAlfonsoIllapuma.setBounds(136, 105, 161, 15);
+		contentPanel.add(lblEricAlfonsoIllapuma);
+		
+		lblSebastianAmadorYallico = new JLabel("Sebastian Amador yallico Siviruero");
+		lblSebastianAmadorYallico.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSebastianAmadorYallico.setBounds(125, 132, 183, 15);
+		contentPanel.add(lblSebastianAmadorYallico);
+		
+		lblEdinsonAdrielSalas = new JLabel("Edinson Adriel Salas Salgado");
+		lblEdinsonAdrielSalas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblEdinsonAdrielSalas.setBounds(141, 159, 152, 15);
+		contentPanel.add(lblEdinsonAdrielSalas);
+		
+		lblEdinsonAdrielSalas_1 = new JLabel("-------------------------------------------------------------------------------------------------------");
+		lblEdinsonAdrielSalas_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblEdinsonAdrielSalas_1.setBounds(11, 26, 412, 15);
+		contentPanel.add(lblEdinsonAdrielSalas_1);
 	}
 
 	public void actionPerformed(ActionEvent e) {

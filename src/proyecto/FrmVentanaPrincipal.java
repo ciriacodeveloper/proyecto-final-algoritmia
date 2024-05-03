@@ -71,10 +71,10 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		public static double fondo4 = 66.0;
 		public static int quemadores4 = 5;
 		// Porcentajes de descuento
-		public static double porcentaje1 = 0.075;
-		public static double porcentaje2 = 0.1;
-		public static double porcentaje3 = 0.125;
-		public static double porcentaje4 = 0.15;
+		public static double porcentaje1 = 7.5;
+		public static double porcentaje2 = 10.0;
+		public static double porcentaje3 = 12.5;
+		public static double porcentaje4 = 15.0;
 		// Obsequios
 		public static String obsequio1 = "Cafetera";
 		public static String obsequio2 = "Licuadora";
@@ -95,6 +95,7 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		public static double anchoMenor = getAnchoMenor();
 		// Ancho mayor
 		public static double anchoMayor = getAnchoMayor();
+		private JMenuItem mntmCerrarSesion;
 		
 
 	/**
@@ -136,6 +137,10 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		
 		mntmSalir = new JMenuItem("Salir");
 		mntmSalir.addActionListener(this);
+		
+		mntmCerrarSesion = new JMenuItem("Cerrar sesión");
+		mntmCerrarSesion.addActionListener(this);
+		mnArchivo.add(mntmCerrarSesion);
 		mnArchivo.add(mntmSalir);
 		
 		mnMantenimiento = new JMenu("Mantenimiento");
@@ -168,15 +173,19 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		menuBar.add(mnConfiguracin);
 		
 		mntmConfigurarDescuentos = new JMenuItem("Configurar descuentos");
+		mntmConfigurarDescuentos.addActionListener(this);
 		mnConfiguracin.add(mntmConfigurarDescuentos);
 		
 		mntmConfigurarObsequios = new JMenuItem("Configurar obsequios");
+		mntmConfigurarObsequios.addActionListener(this);
 		mnConfiguracin.add(mntmConfigurarObsequios);
 		
 		mntmConfigurarCantidadptima = new JMenuItem("Configurar cantidad \u00F3ptima");
+		mntmConfigurarCantidadptima.addActionListener(this);
 		mnConfiguracin.add(mntmConfigurarCantidadptima);
 		
 		mntmConfigurarCuotaDiaria = new JMenuItem("Configurar cuota diaria");
+		mntmConfigurarCuotaDiaria.addActionListener(this);
 		mnConfiguracin.add(mntmConfigurarCuotaDiaria);
 		
 		mnAyuda = new JMenu("Ayuda");
@@ -191,6 +200,21 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmCerrarSesion) {
+			actionPerformedMntmCerrarSesion(e);
+		}
+		if (e.getSource() == mntmConfigurarCuotaDiaria) {
+			actionPerformedMntmConfigurarCuotaDiaria(e);
+		}
+		if (e.getSource() == mntmConfigurarCantidadptima) {
+			actionPerformedMntmConfigurarCantidadptima(e);
+		}
+		if (e.getSource() == mntmConfigurarObsequios) {
+			actionPerformedMntmConfigurarObsequios(e);
+		}
+		if (e.getSource() == mntmConfigurarDescuentos) {
+			actionPerformedMntmConfigurarDescuentos(e);
+		}
 		if (e.getSource() == mntmGenerarReportes) {
 			actionPerformedMntmGenerarReportes(e);
 		}
@@ -213,6 +237,15 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 			actionPerformedMntmSalir(e);
 		}
 	}
+	protected void actionPerformedMntmCerrarSesion(ActionEvent e) {
+		dispose();
+		abrirVentanaLogin();
+	}
+	private void abrirVentanaLogin() {
+		Login con = new Login();
+		con.setVisible(true);
+		con.setLocationRelativeTo(null);
+	}
 	protected void actionPerformedMntmSalir(ActionEvent e) {
 		//CERRAR APLICACION
 		System.exit(0);
@@ -222,14 +255,9 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
 	}
 
 	private void abrirVentanaConsultarCocina() {
-		// Instanciar un objeto de la clase DlgConsultarCocina
 		DlgConsultarCocina con = new DlgConsultarCocina();
-		//ventana sea visible
 		con.setVisible(true);
-		//ubicacion de la ventana en el medio
 		con.setLocationRelativeTo(this);
-		
-		
 	}
 	protected void actionPerformedMntmModificarCocina(ActionEvent e) {
 		abrirVentanaModificarCocina();
@@ -312,7 +340,6 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
         if (ancho4 < menor) menor = ancho4;
         return menor;
 	}
-	
 	public static double getAnchoMayor() {
 		double mayor = ancho0;
         if (ancho1 > mayor) mayor = ancho1;
@@ -321,6 +348,39 @@ public class FrmVentanaPrincipal extends JFrame implements ActionListener {
         if (ancho4 > mayor) mayor = ancho4;
         return mayor;
 	}
+	protected void actionPerformedMntmConfigurarDescuentos(ActionEvent e) {
+		abrirVentanaConfigurarDescuentos();
+	}
+	private void abrirVentanaConfigurarDescuentos() {
+		DlgConfigurarDescuentos con = new DlgConfigurarDescuentos();
+		con.setVisible(true);
+		con.setLocationRelativeTo(this);
+	}
+	protected void actionPerformedMntmConfigurarObsequios(ActionEvent e) {
+		abrirVentanaConfigurarObsequios();
+	}
+	private void abrirVentanaConfigurarObsequios() {
+		DlgConfigurarObsequios con = new DlgConfigurarObsequios();
+		con.setVisible(true);
+		con.setLocationRelativeTo(this);
+	}
+	protected void actionPerformedMntmConfigurarCantidadptima(ActionEvent e) {
+		abrirVentanaConfigurarCantidadptima();
+	}
+	private void abrirVentanaConfigurarCantidadptima() {
+		DlgConfigurarCantidadOptima con = new DlgConfigurarCantidadOptima();
+		con.setVisible(true);
+		con.setLocationRelativeTo(this);
+	}
+	protected void actionPerformedMntmConfigurarCuotaDiaria(ActionEvent e) {
+		abrirVentanaConfigurarCuotaDiaria();
+	}
+	private void abrirVentanaConfigurarCuotaDiaria() {
+		DlgConfigurarCuotaDiaria con = new DlgConfigurarCuotaDiaria();
+		con.setVisible(true);
+		con.setLocationRelativeTo(this);
+	}
+	
 }
 
 
